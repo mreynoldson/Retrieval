@@ -1,0 +1,54 @@
+import java.rmi.RemoteException;
+import java.rmi.Naming;			
+import java.rmi.RemoteException;
+import java.io.*;
+import java.net.MalformedURLException;	
+import java.rmi.NotBoundException;
+import javax.crypto.SealedObject;
+import java.util.Random;
+
+
+public class Retrieve_CW{
+
+	public static void main(String[] args){
+		int uid = 32914954;
+		int passcode = 2108100896;
+		Random rand = new Random();
+
+		try {
+			CW_server_interface blurp = (CW_server_interface)
+					Naming.lookup("rmi://scc311-server.lancs.ac.uk:1099/CW_server");
+
+			Client_request req = new Client_request(uid, rand.nextInt(), passcode);
+			File f = new File("cw.doc");
+			FileOutputStream fos = new FileOutputStream(f); 
+			Server_response serverResponse = blurp.getSpec(uid, req);
+			serverResponse.write_to(fos);
+		}
+		catch (MalformedURLException murle) {
+			System.out.println();
+			System.out.println("MalformedURLException");
+			System.out.println(murle);
+		}
+		catch (RemoteException re) {
+			System.out.println();
+			System.out.println("RemoteException");
+			System.out.println(re);
+		}
+		catch (NotBoundException nbe) {
+			System.out.println();
+			System.out.println("NotBoundException");
+			System.out.println(nbe);
+		}
+		catch (java.lang.ArithmeticException ae) {
+			System.out.println();
+			System.out.println("java.lang.ArithmeticException");
+			System.out.println(ae);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+}
+
+
